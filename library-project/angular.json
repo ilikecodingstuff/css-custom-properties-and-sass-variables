@@ -1,0 +1,170 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "library": {
+      "projectType": "library",
+      "root": "projects/library",
+      "sourceRoot": "projects/library/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/library/tsconfig.lib.json",
+            "project": "projects/library/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/library/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/library/src/test.ts",
+            "tsConfig": "projects/library/tsconfig.spec.json",
+            "karmaConfig": "projects/library/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/library/tsconfig.lib.json",
+              "projects/library/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "showcase-project": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/showcase-project",
+      "sourceRoot": "projects/showcase-project/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/showcase-project",
+            "index": "projects/showcase-project/src/index.html",
+            "main": "projects/showcase-project/src/main.ts",
+            "polyfills": "projects/showcase-project/src/polyfills.ts",
+            "tsConfig": "projects/showcase-project/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/showcase-project/src/favicon.ico",
+              "projects/showcase-project/src/assets"
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "projects/showcase-project/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/showcase-project/src/environments/environment.ts",
+                  "with": "projects/showcase-project/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "showcase-project:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "showcase-project:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "showcase-project:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/showcase-project/src/test.ts",
+            "polyfills": "projects/showcase-project/src/polyfills.ts",
+            "tsConfig": "projects/showcase-project/tsconfig.spec.json",
+            "karmaConfig": "projects/showcase-project/karma.conf.js",
+            "assets": [
+              "projects/showcase-project/src/favicon.ico",
+              "projects/showcase-project/src/assets"
+            ],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "projects/showcase-project/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/showcase-project/tsconfig.app.json",
+              "projects/showcase-project/tsconfig.spec.json",
+              "projects/showcase-project/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/showcase-project/e2e/protractor.conf.js",
+            "devServerTarget": "showcase-project:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "showcase-project:serve:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "library"
+}
